@@ -41,7 +41,7 @@ class Application extends Model
             'job_position_id' => 'integer',
             'user_id' => 'integer',
             'additional_info' => 'array',
-            'last_status_change' => 'timestamp',
+            'last_status_change' => 'datetime',
         ];
     }
 

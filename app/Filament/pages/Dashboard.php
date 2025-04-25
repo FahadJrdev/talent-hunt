@@ -4,7 +4,13 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
+use App\Filament\Widgets\ApplicationFunnelWidget;
+use App\Filament\Widgets\ApplicationStatsWidget;
+use App\Filament\Widgets\ChatbotFlowUsageWidget;
+use App\Filament\Widgets\PopularPositionsWidget;
+use App\Filament\Widgets\RecentApplicationsWidget;
+use App\Filament\Widgets\RecruiterPerformanceWidget;
+use App\Filament\Widgets\TimeToHireWidget;
 
 class Dashboard extends BaseDashboard 
 {
@@ -14,7 +20,16 @@ class Dashboard extends BaseDashboard
     {
         return [
             AccountWidget::class,
-            FilamentInfoWidget::class,
+            ApplicationStatsWidget::class,
+            TimeToHireWidget::class,
+
+            PopularPositionsWidget::class,
+            ApplicationFunnelWidget::class,
+
+            ChatbotFlowUsageWidget::class,
+            RecruiterPerformanceWidget::class,
+
+            RecentApplicationsWidget::class,
         ];
     }
 
