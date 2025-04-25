@@ -7,6 +7,5 @@ use App\Http\Controllers\ChatbotController;
 //     return view('welcome');
 // });
 
-Route::get('/', [ChatbotController::class, 'index']);
-
-Route::post('/upload-cv', [ChatbotController::class, 'uploadCV']);
+Route::get('/', [ChatbotController::class, 'index'])->name('chatbot.index');
+Route::post('/upload-cv', [ChatbotController::class, 'uploadCV'])->name('upload-cv');
