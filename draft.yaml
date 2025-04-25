@@ -1,0 +1,106 @@
+models:
+  User:
+    name: string
+    email: string:unique
+    password: string
+    role: enum:admin,recruiter,viewer default:viewer
+    profile_image: string nullable
+    last_login: timestamp nullable
+    status: enum:active,inactive default:active
+    relationships:
+      hasMany: JobPosition, ChatbotFlow
+
+  JobPosition:
+    title: string
+    department: string
+    description: longtext
+    requirements: longtext
+    responsibilities: longtext
+    location: string
+    salary_range: string nullable
+    status: enum:active,inactive default:active
+    created_by: id foreign:users
+    relationships:
+      hasMany: Application, ChatbotFlow
+      belongsTo: User
+
+  Application:
+    job_position_id: id foreign:job_positions
+    user_id: id foreign:users nullable
+    applicant_name: string
+    applicant_email: string
+    applicant_phone: string nullable
+    cv_file_path: string nullable
+    additional_info: json nullable
+    status: enum:new,reviewed,interview_scheduled,rejected,hired default:new
+    notes: longtext nullable
+    last_status_change: timestamp nullable
+    relationships:
+      belongsTo: JobPosition, User
+      hasMany: ConversationLog
+
+  ChatbotFlow:
+    job_position_id: id foreign:job_positions nullable
+    name: string
+    is_active: boolean default:true
+    created_by: id foreign:users
+    relationships:
+      belongsTo: JobPosition, User
+      hasMany: ChatbotStep
+
+  ChatbotStep:
+    flow_id: id foreign:chatbot_flows
+    step_order: integer
+    message_text: longtext
+    step_type: enum:greeting,question,file_request,confirmation,end
+    expected_response_type: enum:text,file,selection,none
+    options: json nullable
+    validation_rules: json nullable
+    next_step_logic: json nullable
+    relationships:
+      belongsTo: ChatbotFlow
+      hasMany: ConversationLog
+
+  ConversationLog:
+    application_id: id foreign:applications nullable
+    step_id: id foreign:chatbot_steps
+    user_message: longtext nullable
+    bot_message: longtext nullable
+    file_uploaded: boolean default:false
+    file_path: string nullable
+    session_id: string
+    relationships:
+      belongsTo: Application, ChatbotStep
+
+controllers:
+  User:
+    resource: api
+
+  JobPosition:
+    resource: api
+
+  Application:
+    resource: api
+
+  ChatbotFlow:
+    resource: api
+    initiate:
+      validate: job_position_id
+      query: "ChatbotFlow where:job_position_id=? where:is_active=true first with:job_position_id"
+      respond: 200
+    message:
+      validate: session_id, message, step_id
+      dispatch: ProcessChatbotMessage with:request
+      respond: 200
+    upload:
+      validate: file, session_id, step_id
+      dispatch: ProcessFileUpload with:request
+      respond: 200
+
+  ChatbotStep:
+    resource: api
+
+  ConversationLog:
+    resource: api
+
+seeders: User, JobPosition, Application, ChatbotFlow, ChatbotStep, ConversationLog

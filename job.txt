@@ -1,0 +1,65 @@
+Analytics Dashboard
+
+Application counts
+Conversion rates
+Popular positions
+
+
+jobs:
+  ProcessNewApplication:
+    data: application
+
+  ProcessChatbotMessage:
+    data: request
+
+  ProcessFileUpload:
+    data: request
+
+The jobs in the blueprint represent Laravel's queued job classes that handle background processing tasks. Here's why each job is important:
+
+### 1. ProcessNewApplication
+
+This job handles tasks that should happen after an application is submitted but don't need to block the user's interaction:
+
+- Sending confirmation emails to the applicant
+- Notifying recruiters about new applications
+- Creating a user account for the applicant (as we discussed earlier)
+- Processing or analyzing the submitted CV
+- Potentially matching the application against job requirements
+- Updating application status based on initial screening
+
+By processing these tasks in the background, you can quickly respond to the user with a "thank you for applying" message while the system handles these operations asynchronously.
+
+### 2. ProcessChatbotMessage
+
+This job processes each chatbot interaction:
+
+- Interpreting the user's message
+- Determining the appropriate next step in the conversation flow
+- Storing the conversation history
+- Updating the application with information gathered from the conversation
+- Potentially using advanced logic to personalize the conversation
+- Validating user responses against requirements
+
+Processing messages in a job allows for complex operations without blocking the chat interface, ensuring quick responses to the user.
+
+### 3. ProcessFileUpload
+
+This job handles file management after a user uploads their CV:
+
+- Validating the file (virus scanning, format checking)
+- Converting formats if needed (e.g., DOCX to PDF)
+- Extracting text content for analysis
+- Storing the file in the appropriate location
+- Updating the application record with file information
+- Potentially extracting candidate information from the CV
+
+File processing can be resource-intensive, so handling it in a background job ensures the chatbot remains responsive while these operations complete.
+
+Using jobs for these tasks gives you several key benefits:
+- Better user experience with faster response times
+- More reliable processing as failed jobs can be retried
+- Ability to scale your application by adding more queue workers
+- Cleaner code separation between immediate responses and background tasks
+
+For complex operations like processing applications and managing chatbot flows, having these as separate jobs makes your application more maintainable and scalable.
