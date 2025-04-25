@@ -40,16 +40,16 @@ class ChatbotFlow extends Model
 
     public function chatbotSteps(): HasMany
     {
-        return $this->hasMany(ChatbotStep::class);
+        return $this->hasMany(ChatbotStep::class, 'flow_id');
     }
 
     public function jobPosition(): BelongsTo
     {
-        return $this->belongsTo(JobPosition::class);
+        return $this->belongsTo(JobPosition::class, 'job_position_id');
     }
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

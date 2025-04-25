@@ -47,16 +47,16 @@ class Application extends Model
 
     public function conversationLogs(): HasMany
     {
-        return $this->hasMany(ConversationLog::class);
+        return $this->hasMany(ConversationLog::class, 'application_id');
     }
 
     public function jobPosition(): BelongsTo
     {
-        return $this->belongsTo(JobPosition::class);
+        return $this->belongsTo(JobPosition::class, 'job_position_id');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

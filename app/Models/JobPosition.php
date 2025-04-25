@@ -43,16 +43,16 @@ class JobPosition extends Model
 
     public function applications(): HasMany
     {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(Application::class, 'job_position_id');
     }
 
     public function chatbotFlows(): HasMany
     {
-        return $this->hasMany(ChatbotFlow::class);
+        return $this->hasMany(ChatbotFlow::class, 'job_position_id');
     }
 
     public function createdBy(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

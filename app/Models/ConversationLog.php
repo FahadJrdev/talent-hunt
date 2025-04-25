@@ -42,11 +42,11 @@ class ConversationLog extends Model
 
     public function application(): BelongsTo
     {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Application::class, 'application_id');
     }
 
     public function step(): BelongsTo
     {
-        return $this->belongsTo(ChatbotStep::class);
+        return $this->belongsTo(ChatbotStep::class, 'step_id');
     }
 }

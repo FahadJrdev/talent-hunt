@@ -45,11 +45,11 @@ class ChatbotStep extends Model
 
     public function conversationLogs(): HasMany
     {
-        return $this->hasMany(ConversationLog::class);
+        return $this->hasMany(ConversationLog::class, 'step_id');
     }
 
     public function flow(): BelongsTo
     {
-        return $this->belongsTo(ChatbotFlow::class);
+        return $this->belongsTo(ChatbotFlow::class, 'flow_id');
     }
 }
