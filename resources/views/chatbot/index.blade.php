@@ -9,6 +9,7 @@
     <div x-data="{
         sidebarOpen: false,
         fileName: '',
+        showUploadPopup: false,
         isUploading: false,
         showSuccessPopup: false,
         messages: [
@@ -46,31 +47,43 @@
         sendMessage() {
             if (this.newMessage.trim() === '') return;
             
-            // Create a new user message
+            // Create a new user message with file info
             const userMessage = {
                 sender: 'user',
                 content: this.newMessage,
                 time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-                buttons: []
+                buttons: [],
+                hasAttachment: this.fileName ? true : false
             };
             
             // Add to messages array
             this.messages.push(userMessage);
             
-            // Clear input
+            // Clear input and file info
             this.newMessage = '';
+            this.fileName = '';
             
-            // Auto-reply after a short delay (simulating bot response)
+            // Show success popup if it was a file upload
+            if (userMessage.hasAttachment) {
+                $refs.fileInput.value = '';
+                setTimeout(() => {
+                    this.showSuccessPopup = true;
+                }, 1500);
+            }
+            
+            // Auto-reply after a short delay
             setTimeout(() => {
                 const botReply = {
                     sender: 'coca-cola',
-                    content: 'Gracias por tu mensaje. Nuestro equipo lo revisará pronto.',
+                    content: userMessage.hasAttachment 
+                        ? '✅ He recibido tu archivo adjunto. Lo revisaré y te contactaré pronto.' 
+                        : 'Gracias por tu mensaje. Nuestro equipo lo revisará pronto.',
                     time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
                     buttons: []
                 };
                 this.messages.push(botReply);
                 
-                // Scroll to bottom after bot replies
+                // Scroll to bottom
                 this.$nextTick(() => {
                     const chatContainer = document.getElementById('chat-container');
                     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -91,22 +104,92 @@
         },
         handleFileUpload(event) {
             const file = event.target.files[0];
-            if (file) {
-                this.fileName = file.name;
-                this.isUploading = true;
+            if (!file) return;
+
+            this.fileName = file.name;
+            this.isUploading = true;
+
+            // Create a DOM element for the preview
+            const previewContainer = document.createElement('div');
+            
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = 'Preview';
+                img.className = 'max-h-40 rounded-md';
                 
-                // Here you would typically handle the file upload to your server
-                // For example, using fetch or FormData API
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mt-2';
+                wrapper.appendChild(img);
                 
-                // Simulating upload completion after 2 seconds
-                setTimeout(() => {
-                    this.isUploading = false;
-                    this.showSuccessPopup = true;
-                    // You can add the file to your message or do other processing here
-                }, 2000);
+                previewContainer.appendChild(wrapper);
+            } else {
+                const fileSize = (file.size / 1024).toFixed(1);
+                
+                const container = document.createElement('div');
+                container.className = 'mt-2 flex items-center bg-gray-100 p-2 rounded-md';
+                
+                // Create SVG icon
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                svg.className = 'h-8 w-8 text-blue-500 mr-2';
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('stroke', 'currentColor');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-linejoin', 'round');
+                path.setAttribute('stroke-width', '2');
+                path.setAttribute('d', 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z');
+                
+                svg.appendChild(path);
+                container.appendChild(svg);
+                
+                // Create file info div
+                const infoDiv = document.createElement('div');
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'font-medium';
+                nameDiv.textContent = file.name;
+                
+                const sizeDiv = document.createElement('div');
+                sizeDiv.className = 'text-xs text-gray-500';
+                sizeDiv.textContent = `${fileSize} KB`;
+                
+                infoDiv.appendChild(nameDiv);
+                infoDiv.appendChild(sizeDiv);
+                container.appendChild(infoDiv);
+                
+                previewContainer.appendChild(container);
             }
+
+            setTimeout(() => {
+                this.isUploading = false;
+                
+                // Store the preview element reference
+                this.filePreviewElement = previewContainer;
+                
+                // Just store the text message
+                this.newMessage = `He subido mi curriculum: ${file.name}`;
+                
+                this.$nextTick(() => {
+                    if (this.$refs.messageInput) {
+                        this.$refs.messageInput.focus();
+                    }
+                    
+                    // Append the preview to your chat container
+                    const previewTarget = document.getElementById('preview-target');
+                    if (previewTarget) {
+                        previewTarget.innerHTML = '';
+                        previewTarget.appendChild(previewContainer);
+                    }
+                    this.showUploadPopup = false;
+                });
+            }, 1500);
         },
         closePopup() {
+            this.showUploadPopup = false;
             this.showSuccessPopup = false;
         }
     }" class="bg-white min-h-[82vh] font-sans">
@@ -242,8 +325,9 @@
                             <!-- For user messages -->
                             <template x-if="message.sender === 'user' && message.content !== ''">
                                 <div class="flex items-start justify-end space-x-2">
-                                    <div class="flex flex-col items-end">
-                                        <div class="bg-blue-500 text-white rounded-lg rounded-tr-none px-4 py-3 max-w-md" x-text="message.content"></div>
+                                    <div class="flex flex-col items-end max-w-[80%]">
+                                        <div class="bg-blue-500 text-white rounded-lg rounded-tr-none px-4 py-3" x-html="message.content"></div>
+                                        <div x-show="message.hasAttachment" id="preview-target"></div>
                                         <template x-if="message.time">
                                             <div class="text-xs text-gray-500 mt-1" x-text="message.time"></div>
                                         </template>
@@ -267,7 +351,7 @@
                             @change="handleFileUpload($event)"
                             accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
                         >
-                        <button @click="$refs.fileInput.click()" type="button" class="text-gray-400 hover:text-gray-600 cursor-pointer">
+                        <button @click="showUploadPopup = true" type="button" class="text-gray-400 hover:text-gray-600 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                             </svg>
@@ -282,7 +366,8 @@
                         >
                         <input 
                             type="text" 
-                            x-model="newMessage" 
+                            x-model="newMessage"
+                            x-ref="messageInput"
                             @keyup.enter="sendMessage"
                             placeholder="Escribe tu respuesta aquí..." 
                             class="w-full border border-gray-300 rounded-full py-2 px-4 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -309,6 +394,65 @@
                 @click="sidebarOpen = false"
                 :class="{'opacity-50 pointer-events-auto': sidebarOpen, 'opacity-0 pointer-events-none': !sidebarOpen}"
                 class="fixed inset-0 bg-black transition-opacity duration-300 ease-in-out md:hidden z-20">
+            </div>
+
+            <!-- Upload Popup -->
+            <div x-show="showUploadPopup" 
+                class="fixed inset-0 flex items-center justify-center z-50 bg-black/50"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0">
+                
+                <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4 relative">
+                    <!-- Close button -->
+                    <button @click="showUploadPopup = false; fileName = ''; $refs.fileInput.value = ''" 
+                            class="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Upload content -->
+                    <div class="text-center">
+                        <!-- Dashed upload area -->
+                        <div class="border-2 border-dashed border-blue-400 rounded-lg p-8 mb-4 cursor-pointer" 
+                            @click="$refs.fileInput.click()">
+                            <div class="flex flex-col items-center justify-center p-4">
+                                <img src="/assets/images/upload.png" alt="upload">
+                            </div>
+                        </div>
+                        
+                        <!-- Hidden file input -->
+                        <input type="file" x-ref="fileInput" class="hidden" @change="handleFileUpload">
+                        
+                        <!-- Selected file info -->
+                        <div class="flex items-center justify-center gap-2 text-sm text-gray-600 bg-[#E9F0FE] p-2 rounded-md">
+                            <template x-if="!fileName">
+                                <span>No hay archivo seleccionado</span>
+                            </template>
+                            <template x-if="fileName">
+                                <div class="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    <span x-text="fileName"></span>
+                                </div>
+                            </template>
+                            
+                            <!-- Delete file button -->
+                            <button x-show="fileName" 
+                                    @click="fileName = ''; $refs.fileInput.value = ''" 
+                                    class="ml-2 text-gray-500 hover:text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
              <!-- Success Popup -->
