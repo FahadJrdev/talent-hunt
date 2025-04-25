@@ -4,6 +4,19 @@ Application counts
 Conversion rates
 Popular positions
 
+ChatbotFlow:
+  initiate:
+    validate: job_position_id
+    query: "ChatbotFlow where:job_position_id=? where:is_active=true first with:job_position_id"
+    respond: 200
+  message:
+    validate: session_id, message, step_id
+    dispatch: ProcessChatbotMessage with:request
+    respond: 200
+  upload:
+    validate: file, session_id, step_id
+    dispatch: ProcessFileUpload with:request
+    respond: 200
 
 jobs:
   ProcessNewApplication:

@@ -1,0 +1,132 @@
+created:
+    - app/Http/Controllers/UserController.php
+    - app/Http/Controllers/JobPositionController.php
+    - app/Http/Controllers/ApplicationController.php
+    - app/Http/Controllers/ChatbotFlowController.php
+    - app/Http/Controllers/ChatbotStepController.php
+    - app/Http/Controllers/ConversationLogController.php
+    - database/factories/UserFactory.php
+    - database/factories/JobPositionFactory.php
+    - database/factories/ApplicationFactory.php
+    - database/factories/ChatbotFlowFactory.php
+    - database/factories/ChatbotStepFactory.php
+    - database/factories/ConversationLogFactory.php
+    - database/migrations/2025_04_25_121730_create_users_table.php
+    - database/migrations/2025_04_25_121731_create_job_positions_table.php
+    - database/migrations/2025_04_25_121732_create_applications_table.php
+    - database/migrations/2025_04_25_121733_create_chatbot_flows_table.php
+    - database/migrations/2025_04_25_121734_create_chatbot_steps_table.php
+    - database/migrations/2025_04_25_121735_create_conversation_logs_table.php
+    - app/Models/User.php
+    - app/Models/JobPosition.php
+    - app/Models/Application.php
+    - app/Models/ChatbotFlow.php
+    - app/Models/ChatbotStep.php
+    - app/Models/ConversationLog.php
+    - database/seeders/UserSeeder.php
+    - database/seeders/JobPositionSeeder.php
+    - database/seeders/ApplicationSeeder.php
+    - database/seeders/ChatbotFlowSeeder.php
+    - database/seeders/ChatbotStepSeeder.php
+    - database/seeders/ConversationLogSeeder.php
+    - tests/Feature/Http/Controllers/UserControllerTest.php
+    - tests/Feature/Http/Controllers/JobPositionControllerTest.php
+    - tests/Feature/Http/Controllers/ApplicationControllerTest.php
+    - tests/Feature/Http/Controllers/ChatbotFlowControllerTest.php
+    - tests/Feature/Http/Controllers/ChatbotStepControllerTest.php
+    - tests/Feature/Http/Controllers/ConversationLogControllerTest.php
+    - app/Http/Requests/UserStoreRequest.php
+    - app/Http/Requests/UserUpdateRequest.php
+    - app/Http/Requests/JobPositionStoreRequest.php
+    - app/Http/Requests/JobPositionUpdateRequest.php
+    - app/Http/Requests/ApplicationStoreRequest.php
+    - app/Http/Requests/ApplicationUpdateRequest.php
+    - app/Http/Requests/ChatbotFlowStoreRequest.php
+    - app/Http/Requests/ChatbotFlowUpdateRequest.php
+    - app/Http/Requests/ChatbotStepStoreRequest.php
+    - app/Http/Requests/ChatbotStepUpdateRequest.php
+    - app/Http/Requests/ConversationLogStoreRequest.php
+    - app/Http/Requests/ConversationLogUpdateRequest.php
+    - app/Http/Resources/UserCollection.php
+    - app/Http/Resources/UserResource.php
+    - app/Http/Resources/JobPositionCollection.php
+    - app/Http/Resources/JobPositionResource.php
+    - app/Http/Resources/ApplicationCollection.php
+    - app/Http/Resources/ApplicationResource.php
+    - app/Http/Resources/ChatbotFlowCollection.php
+    - app/Http/Resources/ChatbotFlowResource.php
+    - app/Http/Resources/ChatbotStepCollection.php
+    - app/Http/Resources/ChatbotStepResource.php
+    - app/Http/Resources/ConversationLogCollection.php
+    - app/Http/Resources/ConversationLogResource.php
+updated:
+    - routes/api.php
+models:
+    User:
+        {
+            name: string,
+            email: "string unique",
+            password: string,
+            role: "enum:admin,recruiter,viewer default:viewer",
+            profile_image: "string nullable",
+            last_login: "timestamp nullable",
+            status: "enum:active,inactive default:active",
+            relationships: { hasMany: "JobPosition, ChatbotFlow" },
+        }
+    JobPosition:
+        {
+            title: string,
+            department: string,
+            description: longtext,
+            requirements: longtext,
+            responsibilities: longtext,
+            location: string,
+            salary_range: "string nullable",
+            status: "enum:active,inactive default:active",
+            created_by: "id foreign:users",
+            relationships: { hasMany: "Application, ChatbotFlow" },
+        }
+    Application:
+        {
+            job_position_id: "id foreign:job_positions",
+            user_id: "id foreign:users nullable",
+            applicant_name: string,
+            applicant_email: string,
+            applicant_phone: "string nullable",
+            cv_file_path: "string nullable",
+            additional_info: "json nullable",
+            status: "enum:new,reviewed,interview_scheduled,rejected,hired default:new",
+            notes: "longtext nullable",
+            last_status_change: "timestamp nullable",
+            relationships: { hasMany: ConversationLog },
+        }
+    ChatbotFlow:
+        {
+            job_position_id: "id foreign:job_positions nullable",
+            name: string,
+            is_active: "boolean default:true",
+            created_by: "id foreign:users",
+            relationships: { hasMany: ChatbotStep },
+        }
+    ChatbotStep:
+        {
+            flow_id: "id foreign:chatbot_flows",
+            step_order: integer,
+            message_text: longtext,
+            step_type: "enum:greeting,question,file_request,confirmation,end",
+            expected_response_type: "enum:text,file,selection,none",
+            options: "json nullable",
+            validation_rules: "json nullable",
+            next_step_logic: "json nullable",
+            relationships: { hasMany: ConversationLog },
+        }
+    ConversationLog:
+        {
+            application_id: "id foreign:applications nullable",
+            step_id: "id foreign:chatbot_steps",
+            user_message: "longtext nullable",
+            bot_message: "longtext nullable",
+            file_uploaded: "boolean default:false",
+            file_path: "string nullable",
+            session_id: string,
+        }

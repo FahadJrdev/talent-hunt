@@ -1,0 +1,666 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-1234-567890abcdef",
+    "name": "Laravel Job Application API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"secret123\",\n  \"role\": \"recruiter\",\n  \"profile_image\": \"https://example.com/profile.jpg\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"email\": \"john.doe.updated@example.com\",\n  \"role\": \"admin\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Job Positions",
+      "item": [
+        {
+          "name": "List Job Positions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/job-positions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "job-positions"]
+            }
+          }
+        },
+        {
+          "name": "Create Job Position",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Developer\",\n  \"department\": \"Engineering\",\n  \"description\": \"Develop awesome applications\",\n  \"requirements\": \"5+ years experience\",\n  \"responsibilities\": \"Write clean code\",\n  \"location\": \"Remote\",\n  \"salary_range\": \"$90,000 - $120,000\",\n  \"status\": \"active\",\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/job-positions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "job-positions"]
+            }
+          }
+        },
+        {
+          "name": "Get Job Position",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/job-positions/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "job-positions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Job Position",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Senior Developer (Updated)\",\n  \"salary_range\": \"$100,000 - $130,000\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/job-positions/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "job-positions", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Job Position",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/job-positions/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "job-positions", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Applications",
+      "item": [
+        {
+          "name": "List Applications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/applications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications"]
+            }
+          }
+        },
+        {
+          "name": "Create Application",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_position_id\": 1,\n  \"applicant_name\": \"Jane Smith\",\n  \"applicant_email\": \"jane.smith@example.com\",\n  \"applicant_phone\": \"+1234567890\",\n  \"cv_file_path\": \"uploads/cvs/jane_smith.pdf\",\n  \"additional_info\": {\n    \"linkedin\": \"https://linkedin.com/in/janesmith\",\n    \"portfolio\": \"https://janesmith.dev\"\n  },\n  \"status\": \"new\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/applications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications"]
+            }
+          }
+        },
+        {
+          "name": "Get Application",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/applications/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Application",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"interview_scheduled\",\n  \"notes\": \"Candidate looks promising. Scheduled interview for next week.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/applications/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Application",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/applications/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "applications", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chatbot Flows",
+      "item": [
+        {
+          "name": "List Chatbot Flows",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-flows",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-flows"]
+            }
+          }
+        },
+        {
+          "name": "Create Chatbot Flow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"job_position_id\": 1,\n  \"name\": \"Technical Interview Flow\",\n  \"is_active\": true,\n  \"created_by\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-flows",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-flows"]
+            }
+          }
+        },
+        {
+          "name": "Get Chatbot Flow",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-flows/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-flows", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Chatbot Flow",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Technical Interview Flow (Updated)\",\n  \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-flows/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-flows", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Chatbot Flow",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-flows/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-flows", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chatbot Steps",
+      "item": [
+        {
+          "name": "List Chatbot Steps",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-steps",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-steps"]
+            }
+          }
+        },
+        {
+          "name": "Create Chatbot Step",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flow_id\": 1,\n  \"step_order\": 1,\n  \"message_text\": \"Welcome to our interview process. Please introduce yourself.\",\n  \"step_type\": \"greeting\",\n  \"expected_response_type\": \"text\",\n  \"options\": null,\n  \"validation_rules\": {\n    \"min_length\": 10\n  },\n  \"next_step_logic\": {\n    \"default_next_step\": 2\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-steps",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-steps"]
+            }
+          }
+        },
+        {
+          "name": "Get Chatbot Step",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-steps/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-steps", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Chatbot Step",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message_text\": \"Welcome! Please tell us about yourself.\",\n  \"validation_rules\": {\n    \"min_length\": 20\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-steps/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-steps", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Chatbot Step",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/chatbot-steps/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "chatbot-steps", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversation Logs",
+      "item": [
+        {
+          "name": "List Conversation Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/conversation-logs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "conversation-logs"]
+            }
+          }
+        },
+        {
+          "name": "Create Conversation Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"application_id\": 1,\n  \"step_id\": 1,\n  \"user_message\": \"Hi, I'm Jane Smith. I have 5 years of experience in web development.\",\n  \"bot_message\": \"Thank you for your introduction. What technologies are you most proficient in?\",\n  \"file_uploaded\": false,\n  \"session_id\": \"session_12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/conversation-logs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "conversation-logs"]
+            }
+          }
+        },
+        {
+          "name": "Get Conversation Log",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/conversation-logs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "conversation-logs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Conversation Log",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_message\": \"I'm proficient in JavaScript, React, and Node.js\",\n  \"file_uploaded\": true,\n  \"file_path\": \"uploads/portfolio/jane_smith_portfolio.pdf\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/conversation-logs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "conversation-logs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Conversation Log",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/conversation-logs/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "conversation-logs", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "description": "Base URL for the API"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "your_access_token_here",
+        "type": "string"
+      }
+    ]
+  }
+}

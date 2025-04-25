@@ -1,7 +1,7 @@
 models:
   User:
     name: string
-    email: string:unique
+    email: string unique
     password: string
     role: enum:admin,recruiter,viewer default:viewer
     profile_image: string nullable
@@ -22,7 +22,6 @@ models:
     created_by: id foreign:users
     relationships:
       hasMany: Application, ChatbotFlow
-      belongsTo: User
 
   Application:
     job_position_id: id foreign:job_positions
@@ -36,7 +35,6 @@ models:
     notes: longtext nullable
     last_status_change: timestamp nullable
     relationships:
-      belongsTo: JobPosition, User
       hasMany: ConversationLog
 
   ChatbotFlow:
@@ -45,7 +43,6 @@ models:
     is_active: boolean default:true
     created_by: id foreign:users
     relationships:
-      belongsTo: JobPosition, User
       hasMany: ChatbotStep
 
   ChatbotStep:
@@ -58,7 +55,6 @@ models:
     validation_rules: json nullable
     next_step_logic: json nullable
     relationships:
-      belongsTo: ChatbotFlow
       hasMany: ConversationLog
 
   ConversationLog:
@@ -69,8 +65,6 @@ models:
     file_uploaded: boolean default:false
     file_path: string nullable
     session_id: string
-    relationships:
-      belongsTo: Application, ChatbotStep
 
 controllers:
   User:
@@ -84,18 +78,6 @@ controllers:
 
   ChatbotFlow:
     resource: api
-    initiate:
-      validate: job_position_id
-      query: "ChatbotFlow where:job_position_id=? where:is_active=true first with:job_position_id"
-      respond: 200
-    message:
-      validate: session_id, message, step_id
-      dispatch: ProcessChatbotMessage with:request
-      respond: 200
-    upload:
-      validate: file, session_id, step_id
-      dispatch: ProcessFileUpload with:request
-      respond: 200
 
   ChatbotStep:
     resource: api

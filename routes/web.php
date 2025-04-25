@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatbotController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
-Route::get('/', function () {
-    return view('chatbot.index');
-});
+Route::get('/', [ChatbotController::class, 'index']);
 
-Route::post('/api/upload-cv', [App\Http\Controllers\ChatbotController::class, 'uploadCV']);
+Route::post('/upload-cv', [ChatbotController::class, 'uploadCV']);

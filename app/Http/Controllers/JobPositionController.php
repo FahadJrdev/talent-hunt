@@ -12,26 +12,26 @@ use Illuminate\Http\Response;
 
 class JobPositionController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): JobPositionCollection
     {
         $jobPositions = JobPosition::all();
 
         return new JobPositionCollection($jobPositions);
     }
 
-    public function store(JobPositionStoreRequest $request): Response
+    public function store(JobPositionStoreRequest $request): JobPositionResource
     {
         $jobPosition = JobPosition::create($request->validated());
 
         return new JobPositionResource($jobPosition);
     }
 
-    public function show(Request $request, JobPosition $jobPosition): Response
+    public function show(Request $request, JobPosition $jobPosition): JobPositionResource
     {
         return new JobPositionResource($jobPosition);
     }
 
-    public function update(JobPositionUpdateRequest $request, JobPosition $jobPosition): Response
+    public function update(JobPositionUpdateRequest $request, JobPosition $jobPosition): JobPositionResource
     {
         $jobPosition->update($request->validated());
 

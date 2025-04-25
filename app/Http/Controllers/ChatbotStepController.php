@@ -12,26 +12,26 @@ use Illuminate\Http\Response;
 
 class ChatbotStepController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request): ChatbotStepCollection
     {
         $chatbotSteps = ChatbotStep::all();
 
         return new ChatbotStepCollection($chatbotSteps);
     }
 
-    public function store(ChatbotStepStoreRequest $request): Response
+    public function store(ChatbotStepStoreRequest $request): ChatbotStepResource
     {
         $chatbotStep = ChatbotStep::create($request->validated());
 
         return new ChatbotStepResource($chatbotStep);
     }
 
-    public function show(Request $request, ChatbotStep $chatbotStep): Response
+    public function show(Request $request, ChatbotStep $chatbotStep): ChatbotStepResource
     {
         return new ChatbotStepResource($chatbotStep);
     }
 
-    public function update(ChatbotStepUpdateRequest $request, ChatbotStep $chatbotStep): Response
+    public function update(ChatbotStepUpdateRequest $request, ChatbotStep $chatbotStep): ChatbotStepResource
     {
         $chatbotStep->update($request->validated());
 
